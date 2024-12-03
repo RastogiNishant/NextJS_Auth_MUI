@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 interface AuthState {
 	token: string | null;
 }
 
 const initialState: AuthState = {
-	token: null,
+	token: Cookies.get("authToken") || null,
 };
 
 const authSlice = createSlice({
@@ -14,11 +15,11 @@ const authSlice = createSlice({
 	reducers: {
 		setToken(state, action: PayloadAction<string>) {
 			state.token = action.payload;
-			localStorage.setItem("authToken", action.payload);
+			Cookies.set("authToken", action.payload, { expires: 7 });
 		},
 		clearToken(state) {
 			state.token = null;
-			localStorage.removeItem("authToken");
+			Cookies.remove("authToken");
 		},
 	},
 });

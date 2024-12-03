@@ -7,7 +7,7 @@ import * as z from "zod";
 import { loginSchema } from "@/schema/login";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import { useDispatch } from "react-redux";
-import ErrorSnackbar from "../components/snackbar/page";
+import ErrorSnackbar from "../../components/snackbar";
 import { useLoginMutation } from "@/apis/registration";
 import { useState } from "react";
 import { setToken } from "@/reducers/authSlice";

@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signupSchema } from "@/schema/signup";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
-import ErrorSnackbar from "@/app/components/snackbar/page";
+import ErrorSnackbar from "@/components/snackbar";
 import { useRegisterMutation } from "@/apis/registration"; // Import the mutation hook
 import { setToken } from "@/reducers/authSlice";
 
