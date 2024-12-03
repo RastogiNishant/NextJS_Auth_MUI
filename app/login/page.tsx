@@ -6,11 +6,17 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { loginSchema } from "@/schema/login";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
-
+import { handleLogin } from "@/app/services/login";
+import { useDispatch } from "react-redux";
+import ErrorSnackbar from "../components/snackbar/page";
+import { useState } from "react";
 type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
 	const router = useRouter();
+	const dispatch = useDispatch();
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 	const {
 		handleSubmit,
 		register,
@@ -20,15 +26,13 @@ export default function LoginForm() {
 	});
 
 	async function onSubmit(data: FormData) {
-		console.log(isSubmitting);
-		console.log(data);
-		router.push("/dashboard");
-
-		await new Promise<void>((resolve) => {
-			setTimeout(() => {
-				resolve();
-			}, 2000);
-		});
+		await handleLogin(
+			data,
+			dispatch,
+			router,
+			setSnackbarOpen,
+			setErrorMessage,
+		);
 	}
 
 	return (
@@ -43,6 +47,11 @@ export default function LoginForm() {
 				justifyContent: "center",
 			}}
 		>
+			<ErrorSnackbar
+				open={snackbarOpen}
+				message={errorMessage}
+				onClose={() => setSnackbarOpen(false)}
+			/>
 			<Box
 				sx={{
 					bgcolor: "#ededed",
@@ -103,6 +112,17 @@ export default function LoginForm() {
 					}}
 				>
 					Forgot your password?
+				</Link>
+				<Link
+					href='/signup'
+					style={{
+						display: "block",
+						textAlign: "center",
+						marginTop: "16px",
+						color: "#1976d2",
+					}}
+				>
+					Sign Up
 				</Link>
 			</Box>
 		</Container>

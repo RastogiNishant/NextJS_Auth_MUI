@@ -1,15 +1,13 @@
 "use client";
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../reducers/authSlice";
-import { userApi } from "../apis/userApis";
 import { Middleware } from "redux";
 import logger from "redux-logger";
+import authReducer from "@/reducers/authSlice";
+import { userApi } from "@/apis/userApis";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const middleware: Middleware[] = isDev
-	? [logger, userApi.middleware]
-	: [userApi.middleware];
+const middleware: Middleware[] = isDev ? [logger] : [userApi.middleware];
 
 export const store = configureStore({
 	reducer: {

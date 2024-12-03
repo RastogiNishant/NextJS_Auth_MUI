@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import Login from "./components/login/page";
+import Login from "./login/page";
 
 export default function Home() {
 	return (
