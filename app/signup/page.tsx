@@ -9,7 +9,8 @@ import * as z from "zod";
 import { signupSchema } from "@/schema/signup";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import ErrorSnackbar from "@/app/components/snackbar/page";
-import { handleSignup } from "@/app/services/signup";
+import { useRegisterMutation } from "@/apis/registration"; // Import the mutation hook
+import { setToken } from "@/reducers/authSlice";
 
 type FormData = z.infer<typeof signupSchema>;
 
@@ -26,25 +27,29 @@ export default function SignupForm() {
 		resolver: zodResolver(signupSchema),
 	});
 
+	const [registerUser] = useRegisterMutation();
+
 	const onSubmit = async (data: FormData) => {
-		await handleSignup(
-			data,
-			dispatch,
-			router,
-			setSnackbarOpen,
-			setErrorMessage,
-		);
+		try {
+			const response = await registerUser(data).unwrap();
+			dispatch(setToken(response.token));
+			router.push("/dashboard");
+		} catch (error) {
+			console.error("Registration error:", error);
+			setSnackbarOpen(true);
+			setErrorMessage("Registration failed. Please try again.");
+		}
 	};
 
 	return (
 		<Container
 			maxWidth='sm'
 			sx={{
-				bgcolor: "transparent",
 				color: "white",
 				height: "100vh",
 				display: "flex",
 				alignItems: "center",
+				bgcolor: "transparent",
 				justifyContent: "center",
 			}}
 		>

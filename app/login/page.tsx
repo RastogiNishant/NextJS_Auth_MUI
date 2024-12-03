@@ -6,10 +6,12 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { loginSchema } from "@/schema/login";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
-import { handleLogin } from "@/app/services/login";
 import { useDispatch } from "react-redux";
 import ErrorSnackbar from "../components/snackbar/page";
+import { useLoginMutation } from "@/apis/registration";
 import { useState } from "react";
+import { setToken } from "@/reducers/authSlice";
+
 type FormData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
@@ -17,6 +19,7 @@ export default function LoginForm() {
 	const dispatch = useDispatch();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [loginUser] = useLoginMutation();
 	const {
 		handleSubmit,
 		register,
@@ -26,13 +29,15 @@ export default function LoginForm() {
 	});
 
 	async function onSubmit(data: FormData) {
-		await handleLogin(
-			data,
-			dispatch,
-			router,
-			setSnackbarOpen,
-			setErrorMessage,
-		);
+		try {
+			const responseData = await loginUser(data).unwrap();
+			dispatch(setToken(responseData.token));
+			router.push("/dashboard");
+		} catch (error) {
+			console.error("Login error:", error);
+			setSnackbarOpen(true);
+			setErrorMessage("Login failed. Please try again.");
+		}
 	}
 
 	return (
