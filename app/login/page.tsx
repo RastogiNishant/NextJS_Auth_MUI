@@ -8,7 +8,7 @@ import { loginSchema } from "@/schema/login";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ErrorSnackbar from "../../components/snackbar";
-import { useLoginMutation } from "@/apis/registration";
+import { useLoginMutation } from "@/app/services/user";
 import { useState } from "react";
 import { setToken } from "@/reducers/authSlice";
 

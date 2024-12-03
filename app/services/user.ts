@@ -18,8 +18,24 @@ interface LoginResponse {
 	token: string;
 }
 
-export const registrationApi = createApi({
-	reducerPath: "registrationApi",
+interface User {
+	id: number;
+	email: string;
+	first_name: string;
+	last_name: string;
+	avatar: string;
+}
+
+interface UsersResponse {
+	page: number;
+	per_page: number;
+	total: number;
+	total_pages: number;
+	data: User[];
+}
+
+export const userApi = createApi({
+	reducerPath: "userApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "https://reqres.in/api" }),
 	endpoints: (builder) => ({
 		register: builder.mutation<RegisterResponse, RegisterRequest>({
@@ -36,7 +52,11 @@ export const registrationApi = createApi({
 				body: credentials,
 			}),
 		}),
+		getUsers: builder.query<UsersResponse, number>({
+			query: (page) => `/users?page=${page}`,
+		}),
 	}),
 });
 
-export const { useRegisterMutation, useLoginMutation } = registrationApi;
+export const { useRegisterMutation, useLoginMutation, useGetUsersQuery } =
+	userApi;

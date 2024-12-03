@@ -23,7 +23,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 		// Redirect if not authenticated
 		if (!isAuthenticated) {
 			router.push("/login");
-			alert("Please log in to access this page.");
 		} else {
 			setLoading(false);
 		}

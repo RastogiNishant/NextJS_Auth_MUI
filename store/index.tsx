@@ -3,19 +3,19 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Middleware } from "redux";
 import logger from "redux-logger";
 import authReducer from "@/reducers/authSlice";
-import { registrationApi } from "@/apis/registration";
+import { userApi } from "@/app/services/user";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const middleware: Middleware[] = [
-	registrationApi.middleware,
+	userApi.middleware,
 	...(isDev ? [logger] : []),
 ];
 
 export const store = configureStore({
 	reducer: {
 		auth: authReducer,
-		[registrationApi.reducerPath]: registrationApi.reducer,
+		[userApi.reducerPath]: userApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(middleware),

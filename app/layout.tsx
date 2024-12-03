@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 					>
 						<Container
 							component='main'
-							maxWidth='xs'
+							// maxWidth='xs'
 							style={{ flex: 1 }}
 						>
 							{children}{" "}
