@@ -14,3 +14,15 @@ export type AppInputProps = {
 	error?: FieldError;
 	register: UseFormRegisterReturn;
 };
+
+type User = {
+	id: number;
+	first_name: string;
+	last_name: string;
+	email: string;
+	avatar: string;
+};
+
+export type UserCardProps = {
+	user: User;
+};
