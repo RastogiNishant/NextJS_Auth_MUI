@@ -38,6 +38,31 @@ export default function RootLayout({ children }: RootLayoutProps) {
 						}}
 					>
 						<Container component='main' style={{ flex: 1 }}>
+							<header
+								style={{
+									padding: "1rem",
+									textAlign: "center",
+									fontSize: "clamp(1rem, 2vw, 1.5rem)",
+									color: "#666",
+									borderBottom: "1px solid #eee",
+									margin: "0 auto",
+									width: "100%",
+									maxWidth: "1200px",
+								}}
+							>
+								Created by{" "}
+								<a
+									href='https://github.com/RastogiNishant'
+									style={{
+										color: "#0070f3",
+										textDecoration: "none",
+										fontWeight: 500,
+										transition: "color 0.2s ease",
+									}}
+								>
+									@Nishant
+								</a>
+							</header>
 							{children}
 						</Container>
 					</div>
