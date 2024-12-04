@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/app/hooks/useAuth";
 
 interface ProtectedRouteProps {
 	children: React.ReactNode;

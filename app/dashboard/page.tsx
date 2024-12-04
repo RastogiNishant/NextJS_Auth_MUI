@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { useState, MouseEvent } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useGetUsersQuery } from "@/app/services/user";
-import ProtectedRoute from "@/components/auth/protectedRoutes";
+import { useGetUsersQuery } from "@/app/lib/api/user";
+import ProtectedRoute from "@/app/components/auth/protectedRoutes";
 import {
 	Box,
 	Menu,
@@ -18,8 +18,8 @@ import {
 	CardContent,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ErrorSnackbar from "@/components/snackbar";
-import { clearToken } from "@/reducers/authSlice";
+import ErrorSnackbar from "@/app/components/toast/snackbar";
+import { clearToken } from "@/app/lib/reducers/authSlice";
 import { useDispatch } from "react-redux";
 
 const Dashboard = () => {

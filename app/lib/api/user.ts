@@ -36,7 +36,9 @@ interface UsersResponse {
 
 export const userApi = createApi({
 	reducerPath: "userApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "https://reqres.in/api" }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	}),
 	endpoints: (builder) => ({
 		register: builder.mutation<RegisterResponse, RegisterRequest>({
 			query: (credentials) => ({

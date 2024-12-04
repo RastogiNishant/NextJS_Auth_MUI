@@ -6,11 +6,11 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { registerSchema } from "@/schema/register";
+import { registerSchema } from "@/app/schema/register";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
-import ErrorSnackbar from "@/components/snackbar";
-import { useRegisterMutation } from "@/app/services/user"; // Import the mutation hook
-import { setToken } from "@/reducers/authSlice";
+import ErrorSnackbar from "@/app/components/toast/snackbar";
+import { useRegisterMutation } from "@/app/lib/api/user"; // Import the mutation hook
+import { setToken } from "@/app/lib/reducers/authSlice";
 
 type FormData = z.infer<typeof registerSchema>;
 

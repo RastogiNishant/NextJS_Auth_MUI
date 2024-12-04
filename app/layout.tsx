@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import localFont from "next/font/local";
-import ClientProviders from "@/store/provider";
+import ClientProviders from "@/app/lib/store/provider";
 import { Container } from "@mui/material";
 import "@/app/globals.css";
 

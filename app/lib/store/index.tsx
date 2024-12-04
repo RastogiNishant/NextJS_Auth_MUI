@@ -2,8 +2,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { Middleware } from "redux";
 import logger from "redux-logger";
-import authReducer from "@/reducers/authSlice";
-import { userApi } from "@/app/services/user";
+import authReducer from "@/app/lib/reducers/authSlice";
+import { userApi } from "@/app/lib/api/user";
 
 const isDev = process.env.NODE_ENV === "development";
 
