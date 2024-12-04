@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { ReactNode } from "react";
 import localFont from "next/font/local";
-import "./globals.css";
-import ClientProviders from "../store/provider";
+import ClientProviders from "@/store/provider";
 import { Container } from "@mui/material";
+import "@/app/globals.css";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -27,7 +27,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (
-		<html lang='en'>
+		<html lang='en' data-theme='light'>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ClientProviders>
 					<div
@@ -37,12 +37,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 							minHeight: "100vh",
 						}}
 					>
-						<Container
-							component='main'
-							// maxWidth='xs'
-							style={{ flex: 1 }}
-						>
-							{children}{" "}
+						<Container component='main' style={{ flex: 1 }}>
+							{children}
 						</Container>
 					</div>
 				</ClientProviders>

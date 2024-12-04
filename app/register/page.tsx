@@ -6,15 +6,15 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { signupSchema } from "@/schema/signup";
+import { registerSchema } from "@/schema/register";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import ErrorSnackbar from "@/components/snackbar";
 import { useRegisterMutation } from "@/app/services/user"; // Import the mutation hook
 import { setToken } from "@/reducers/authSlice";
 
-type FormData = z.infer<typeof signupSchema>;
+type FormData = z.infer<typeof registerSchema>;
 
-export default function SignupForm() {
+export default function RegisterForm() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function SignupForm() {
 		register,
 		formState: { errors, isSubmitting, isDirty },
 	} = useForm<FormData>({
-		resolver: zodResolver(signupSchema),
+		resolver: zodResolver(registerSchema),
 	});
 
 	const [registerUser] = useRegisterMutation();

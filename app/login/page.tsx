@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { loginSchema } from "@/schema/login";
-import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import { Button, TextField, Typography, Grid } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ErrorSnackbar from "../../components/snackbar";
 import { useLoginMutation } from "@/app/services/user";
@@ -23,7 +23,7 @@ export default function LoginForm() {
 	const {
 		handleSubmit,
 		register,
-		formState: { errors, isSubmitting, isDirty, isValid },
+		formState: { errors, isSubmitting, isDirty },
 	} = useForm<FormData>({
 		resolver: zodResolver(loginSchema),
 	});
@@ -41,15 +41,19 @@ export default function LoginForm() {
 	}
 
 	return (
-		<Container
-			maxWidth='sm'
+		<Grid
+			container
+			direction='column'
+			margin='auto'
+			justifyContent='center'
+			alignItems='center'
 			sx={{
 				bgcolor: "transparent",
 				color: "white",
-				height: "100vh",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
+				minHeight: "100vh",
+				maxHeight: "100vh",
+				width: "100%",
+				maxWidth: "400px",
 			}}
 		>
 			<ErrorSnackbar
@@ -57,7 +61,9 @@ export default function LoginForm() {
 				message={errorMessage}
 				onClose={() => setSnackbarOpen(false)}
 			/>
-			<Box
+			<Grid
+				item
+				xs={12}
 				sx={{
 					bgcolor: "#ededed",
 					borderRadius: "16px",
@@ -97,18 +103,18 @@ export default function LoginForm() {
 
 					<Button
 						type='submit'
-						disabled={!isDirty || !isValid || isSubmitting}
+						disabled={!isDirty || isSubmitting}
 						variant='contained'
 						color='primary'
 						fullWidth
 						sx={{ mt: 3 }}
 					>
-						{isSubmitting ? "Signing In..." : "Sign In"}
+						{isSubmitting ? "Logging In..." : "Login"}
 					</Button>
 				</form>
 
 				<Link
-					href='/forgot-password'
+					href='/register'
 					style={{
 						display: "block",
 						textAlign: "center",
@@ -116,20 +122,9 @@ export default function LoginForm() {
 						color: "#1976d2",
 					}}
 				>
-					Forgot your password?
+					Don&apos;t have an account? Register
 				</Link>
-				<Link
-					href='/signup'
-					style={{
-						display: "block",
-						textAlign: "center",
-						marginTop: "16px",
-						color: "#1976d2",
-					}}
-				>
-					Sign Up
-				</Link>
-			</Box>
-		</Container>
+			</Grid>
+		</Grid>
 	);
 }

@@ -5,17 +5,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useGetUsersQuery } from "@/app/services/user";
 import ProtectedRoute from "@/components/auth/protectedRoutes";
 import {
-	Container,
+	Box,
+	Menu,
 	Grid,
 	Card,
-	CardContent,
-	Typography,
-	Pagination,
-	Box,
 	Skeleton,
-	Menu,
 	MenuItem,
+	Container,
+	Typography,
 	IconButton,
+	Pagination,
+	CardContent,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ErrorSnackbar from "@/components/snackbar";
@@ -48,45 +48,112 @@ const Dashboard = () => {
 		dispatch(clearToken());
 	};
 
-	if (isLoading) {
-		return (
-			<Box
-				sx={{
-					display: "flex",
-					height: "100vh",
-					alignItems: "center",
-					justifyContent: "center",
-				}}
-			>
-				<CircularProgress />
-			</Box>
-		);
-	}
+	const renderLoading = () => (
+		<Box
+			sx={{
+				display: "flex",
+				height: "100vh",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<CircularProgress />
+		</Box>
+	);
 
-	if (error) {
-		return (
-			<ProtectedRoute>
-				<ErrorSnackbar
-					open={true}
-					message='Error loading users'
-					onClose={() => window.location.reload()}
-				/>
-				<Container maxWidth='xl' sx={{ mt: 4, width: "100%" }}>
-					<Grid container spacing={4}>
-						{[1, 2, 3, 4, 5, 6].map((item) => (
-							<Grid item xs={12} sm={6} md={4} key={item}>
-								<Skeleton
-									variant='rectangular'
-									width={350}
-									height={200}
-								/>
-							</Grid>
-						))}
-					</Grid>
-				</Container>
-			</ProtectedRoute>
-		);
-	}
+	const renderError = () => (
+		<ProtectedRoute>
+			<ErrorSnackbar
+				open={true}
+				message='Error loading users'
+				onClose={() => window.location.reload()}
+			/>
+			<Container maxWidth='xl' sx={{ mt: 4, width: "100%" }}>
+				<Grid container spacing={4}>
+					{[1, 2, 3, 4, 5, 6].map((item) => (
+						<Grid item xs={12} sm={6} md={4} key={item}>
+							<Skeleton
+								variant='rectangular'
+								width={350}
+								height={200}
+							/>
+						</Grid>
+					))}
+				</Grid>
+			</Container>
+		</ProtectedRoute>
+	);
+
+	const renderUsers = () => (
+		<Grid container spacing={4}>
+			{data?.data.map((user) => (
+				<Grid item xs={12} sm={6} md={4} key={user.id}>
+					<Card
+						component='div'
+						sx={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							padding: 2,
+							maxWidth: 450,
+							minHeight: 200,
+							justifyContent: "space-between",
+						}}
+					>
+						<Image
+							src={user.avatar}
+							alt={user.first_name}
+							width={100}
+							height={100}
+							style={{
+								borderRadius: "50%",
+								objectFit: "cover",
+							}}
+						/>
+						<CardContent
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								width: "100%",
+								flexGrow: 1,
+								justifyContent: "center",
+							}}
+						>
+							<Typography
+								variant='h6'
+								component='div'
+								sx={{
+									textAlign: "center",
+									wordBreak: "break-word",
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									display: "block",
+								}}
+							>
+								{user.first_name} {user.last_name}
+							</Typography>
+							<Typography
+								color='textSecondary'
+								sx={{
+									textAlign: "center",
+									wordBreak: "break-word",
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									display: "block",
+								}}
+							>
+								{user.email}
+							</Typography>
+						</CardContent>
+					</Card>
+				</Grid>
+			))}
+		</Grid>
+	);
+
+	if (isLoading) return renderLoading();
+	if (error) return renderError();
 
 	return (
 		<ProtectedRoute>
@@ -115,71 +182,7 @@ const Dashboard = () => {
 					</Menu>
 				</Box>
 
-				<Grid container spacing={4}>
-					{data?.data.map((user) => (
-						<Grid item xs={12} sm={6} md={4} key={user.id}>
-							<Card
-								component='div'
-								sx={{
-									display: "flex",
-									flexDirection: "column",
-									alignItems: "center",
-									padding: 2,
-									maxWidth: 450,
-									minHeight: 200,
-									justifyContent: "space-between",
-								}}
-							>
-								<Image
-									src={user.avatar}
-									alt={user.first_name}
-									width={100}
-									height={100}
-									style={{
-										borderRadius: "50%",
-										objectFit: "cover",
-									}}
-								/>
-								<CardContent
-									sx={{
-										display: "flex",
-										flexDirection: "column",
-										alignItems: "center",
-										width: "100%",
-										flexGrow: 1,
-										justifyContent: "center",
-									}}
-								>
-									<Typography
-										variant='h6'
-										component='div'
-										sx={{
-											textAlign: "center",
-											wordBreak: "break-word",
-											overflow: "hidden",
-											textOverflow: "ellipsis",
-											display: "block",
-										}}
-									>
-										{user.first_name} {user.last_name}
-									</Typography>
-									<Typography
-										color='textSecondary'
-										sx={{
-											textAlign: "center",
-											wordBreak: "break-word",
-											overflow: "hidden",
-											textOverflow: "ellipsis",
-											display: "block",
-										}}
-									>
-										{user.email}
-									</Typography>
-								</CardContent>
-							</Card>
-						</Grid>
-					))}
-				</Grid>
+				{renderUsers()}
 
 				<Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
 					<Pagination
