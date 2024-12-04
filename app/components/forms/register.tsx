@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Container, Box, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import { registerSchema } from "@/app/schema/register";
 import AppInput from "@/app/components/common/appInput";
 import ErrorSnackbar from "@/app/components/toast/snackbar";
@@ -46,14 +46,17 @@ export default function RegisterForm() {
 	};
 
 	return (
-		<Container
-			maxWidth='sm'
+		<Grid
+			container
+			direction='column'
+			margin='auto'
+			justifyContent='center'
+			alignItems='center'
 			sx={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				height: "100vh",
-				bgcolor: "background.default",
+				bgcolor: "transparent",
+				minHeight: "100vh",
+				width: "100%",
+				maxWidth: "400px",
 			}}
 		>
 			<ErrorSnackbar
@@ -62,54 +65,55 @@ export default function RegisterForm() {
 				onClose={() => setSnackbar({ open: false, message: "" })}
 			/>
 
-			<Box
-				component='form'
-				onSubmit={handleSubmit(onSubmit)}
+			<Grid
+				item
+				xs={12}
 				sx={{
-					bgcolor: "white",
+					bgcolor: "#ededed",
+					borderRadius: "16px",
 					padding: 4,
-					borderRadius: 2,
-					boxShadow: 2,
-					width: "100%",
+					color: "#000",
 				}}
 			>
 				<Typography variant='h5' component='h1' gutterBottom>
 					Create an Account
 				</Typography>
 
-				<AppInput
-					id='email'
-					label='Email Address'
-					error={errors.email}
-					register={register("email")}
-				/>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<AppInput
+						id='email'
+						label='Email Address'
+						error={errors.email}
+						register={register("email")}
+					/>
 
-				<AppInput
-					id='password'
-					label='Password'
-					type='password'
-					error={errors.password}
-					register={register("password")}
-				/>
+					<AppInput
+						id='password'
+						label='Password'
+						type='password'
+						error={errors.password}
+						register={register("password")}
+					/>
 
-				<AppInput
-					id='confirmPassword'
-					label='Confirm Password'
-					type='password'
-					error={errors.confirmPassword}
-					register={register("confirmPassword")}
-				/>
+					<AppInput
+						id='confirmPassword'
+						label='Confirm Password'
+						type='password'
+						error={errors.confirmPassword}
+						register={register("confirmPassword")}
+					/>
 
-				<Button
-					type='submit'
-					disabled={!isDirty || isSubmitting}
-					variant='contained'
-					color='primary'
-					fullWidth
-					sx={{ mt: 3 }}
-				>
-					{isSubmitting ? "Registering..." : "Register"}
-				</Button>
+					<Button
+						type='submit'
+						disabled={!isDirty || isSubmitting}
+						variant='contained'
+						color='primary'
+						fullWidth
+						sx={{ mt: 3 }}
+					>
+						{isSubmitting ? "Registering..." : "Register"}
+					</Button>
+				</form>
 
 				<Typography variant='body2' align='center' sx={{ mt: 2 }}>
 					Already have an account?{" "}
@@ -117,7 +121,7 @@ export default function RegisterForm() {
 						Log In
 					</Link>
 				</Typography>
-			</Box>
-		</Container>
+			</Grid>
+		</Grid>
 	);
 }

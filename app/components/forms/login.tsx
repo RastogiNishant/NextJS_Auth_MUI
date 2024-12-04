@@ -102,17 +102,12 @@ export default function LoginForm() {
 						{isSubmitting ? "Logging In..." : "Login"}
 					</Button>
 				</form>
-				<Link
-					href='/register'
-					style={{
-						display: "block",
-						textAlign: "center",
-						marginTop: "16px",
-						color: "#1976d2",
-					}}
-				>
-					Don&apos;t have an account? Register
-				</Link>
+				<Typography variant='body2' align='center' sx={{ mt: 2 }}>
+					Don&apos;t have an account?{" "}
+					<Link href='/register' style={{ color: "#1976d2" }}>
+						Register
+					</Link>
+				</Typography>
 			</Grid>
 		</Grid>
 	);
