@@ -28,8 +28,10 @@ export default function LoginForm() {
 	const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [loginUser] = useLoginMutation();
-	const { isLoggedOutSuccess } = useSelector(
-		(state: { auth: { isLoggedOutSuccess: boolean } }) => state.auth,
+	const { isLoggedOutSuccess, isLoggedInSuccess } = useSelector(
+		(state: {
+			auth: { isLoggedOutSuccess: boolean; isLoggedInSuccess: boolean };
+		}) => state.auth,
 	);
 	const {
 		handleSubmit,
@@ -43,7 +45,6 @@ export default function LoginForm() {
 		try {
 			const responseData = await loginUser(data).unwrap();
 			dispatch(setToken(responseData.token));
-			setSuccessSnackbarOpen(true);
 			router.push("/dashboard");
 		} catch (error: unknown) {
 			setSnackbarOpen(true);
@@ -52,11 +53,11 @@ export default function LoginForm() {
 	}
 
 	useEffect(() => {
-		if (isLoggedOutSuccess) {
+		if (isLoggedOutSuccess && !isLoggedInSuccess) {
 			setSuccessSnackbarOpen(true);
 			dispatch(clearIsLoggedOutSuccess());
 		}
-	}, [isLoggedOutSuccess, dispatch]);
+	}, [isLoggedOutSuccess, isLoggedInSuccess, dispatch]);
 
 	return (
 		<Grid
