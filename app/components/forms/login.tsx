@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/app/schema/login";
 import { Button, Typography, Grid } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorSnackbar from "@/app/components/toast/snackbar";
 import { useLoginMutation } from "@/app/lib/api/user";
-import { useState } from "react";
-import { setToken } from "@/app/lib/reducers/authSlice";
+import { useEffect, useState } from "react";
+import {
+	clearIsLoggedOutSuccess,
+	setToken,
+} from "@/app/lib/reducers/authSlice";
 import { handleApiError } from "@/app/lib/utils/errorHandler";
 import { ApiError } from "@/types";
 import AppInput from "@/app/components/common/appInput";
@@ -22,9 +25,12 @@ export default function LoginForm() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [loginUser] = useLoginMutation();
-
+	const { isLoggedOutSuccess } = useSelector(
+		(state: { auth: { isLoggedOutSuccess: boolean } }) => state.auth,
+	);
 	const {
 		handleSubmit,
 		register,
@@ -37,12 +43,20 @@ export default function LoginForm() {
 		try {
 			const responseData = await loginUser(data).unwrap();
 			dispatch(setToken(responseData.token));
+			setSuccessSnackbarOpen(true);
 			router.push("/dashboard");
 		} catch (error: unknown) {
 			setSnackbarOpen(true);
 			setErrorMessage(handleApiError(error as ApiError));
 		}
 	}
+
+	useEffect(() => {
+		if (isLoggedOutSuccess) {
+			setSuccessSnackbarOpen(true);
+			dispatch(clearIsLoggedOutSuccess());
+		}
+	}, [isLoggedOutSuccess, dispatch]);
 
 	return (
 		<Grid
@@ -64,6 +78,12 @@ export default function LoginForm() {
 				message={errorMessage}
 				onClose={() => setSnackbarOpen(false)}
 			/>
+			<ErrorSnackbar
+				open={successSnackbarOpen}
+				message='Logged out successfully!'
+				onClose={() => setSuccessSnackbarOpen(false)}
+				severity='success'
+			/>
 			<Grid
 				item
 				xs={12}
@@ -75,7 +95,7 @@ export default function LoginForm() {
 				}}
 			>
 				<Typography variant='h5' component='h1' gutterBottom>
-					Welcome back!
+					Please login to continue
 				</Typography>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<AppInput

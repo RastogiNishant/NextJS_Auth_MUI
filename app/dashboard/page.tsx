@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, MouseEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useState, MouseEvent, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
 	Box,
@@ -20,15 +20,21 @@ import ErrorSnackbar from "@/app/components/toast/snackbar";
 import UserCard from "@/app/components/common/userCard";
 import LoadingSpinner from "@/app/components/common/loadingSpinner";
 import { useGetUsersQuery } from "@/app/lib/api/user";
-import { clearToken } from "@/app/lib/reducers/authSlice";
+import {
+	clearToken,
+	clearIsLoggedInSuccess,
+} from "@/app/lib/reducers/authSlice";
 
 const Dashboard = () => {
-	const [page, setPage] = useState(1);
 	const dispatch = useDispatch();
 	const router = useRouter();
+	const [page, setPage] = useState(1);
+	const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
 	const { data, isLoading, error } = useGetUsersQuery(page);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+	const { isLoggedInSuccess } = useSelector(
+		(state: { auth: { isLoggedInSuccess: boolean } }) => state.auth,
+	);
 	const handlePageChange = (
 		event: React.ChangeEvent<unknown>,
 		value: number,
@@ -44,6 +50,13 @@ const Dashboard = () => {
 		dispatch(clearToken());
 		router.push("/login");
 	};
+
+	useEffect(() => {
+		if (isLoggedInSuccess) {
+			setSuccessSnackbarOpen(true);
+			dispatch(clearIsLoggedInSuccess());
+		}
+	}, [isLoggedInSuccess, dispatch]);
 
 	if (isLoading) return <LoadingSpinner />;
 
@@ -75,6 +88,12 @@ const Dashboard = () => {
 	return (
 		<ProtectedRoute>
 			<Container maxWidth='xl' sx={{ mt: 4, width: "100%" }}>
+				<ErrorSnackbar
+					open={successSnackbarOpen}
+					message='Successfully logged in!'
+					onClose={() => setSuccessSnackbarOpen(false)}
+					severity='success'
+				/>
 				<Box
 					sx={{
 						display: "flex",

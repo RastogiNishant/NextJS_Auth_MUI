@@ -4,12 +4,14 @@ import { Snackbar, Alert } from "@mui/material";
 interface ErrorSnackbarProps {
 	open: boolean;
 	message: string;
+	severity?: "success" | "error";
 	onClose: () => void;
 }
 
 const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
 	open,
 	message,
+	severity = "error",
 	onClose,
 }) => {
 	return (
@@ -22,7 +24,7 @@ const ErrorSnackbar: React.FC<ErrorSnackbarProps> = ({
 				horizontal: "center",
 			}}
 		>
-			<Alert severity='error' onClose={onClose}>
+			<Alert severity={severity} onClose={onClose}>
 				{message}
 			</Alert>
 		</Snackbar>
